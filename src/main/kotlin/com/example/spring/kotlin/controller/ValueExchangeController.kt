@@ -2,8 +2,8 @@ package com.example.spring.kotlin.controller
 
 import com.example.spring.kotlin.dto.ApiErrorDto
 import com.example.spring.kotlin.dto.ApiStatusDto
+import com.example.spring.kotlin.dto.EncryptedPayloadRequest
 import com.example.spring.kotlin.dto.ValueExchangeReferenceDto
-import com.example.spring.kotlin.dto.ValueExchangeRequest
 import com.example.spring.kotlin.model.ValueExchange
 import com.example.spring.kotlin.service.ValueExchangeService
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,8 +33,8 @@ class ValueExchangeController() {
     }
 
     @PostMapping("/valueExchange")
-    fun createValueExchange(@RequestBody valueExchangeRequest: ValueExchangeRequest): ResponseEntity<ValueExchangeReferenceDto> {
-        return valueExchangeService.createValueExchange(valueExchangeRequest)
+    fun createValueExchange(@RequestBody encryptedPayloadRequest: EncryptedPayloadRequest): ResponseEntity<ValueExchangeReferenceDto> {
+        return valueExchangeService.createValueExchange(encryptedPayloadRequest)
     }
 
     @GetMapping("/valueExchange/{id}")
