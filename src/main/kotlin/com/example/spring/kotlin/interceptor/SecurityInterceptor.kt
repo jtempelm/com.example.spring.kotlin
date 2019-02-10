@@ -26,12 +26,5 @@ class SecurityInterceptor : HandlerInterceptor {
             logger.error(e.message)
 
         }
-        val string = "{\n" +
-                "        \"merchantId\": 1,\n" +
-                "        \"customerId\": 1,\n" +
-                "        \"currency\": \"USD\",\n" +
-                "        \"amount\": \"5.00\",\n" +
-                "        \"productDescription\": \"Pack of socks\"\n" +
-                "    }"
     }
 }

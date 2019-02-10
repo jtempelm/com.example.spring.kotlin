@@ -35,7 +35,7 @@ class ValueExchangeServiceImpl : ValueExchangeService {
         val valueExchangeRequest: ValueExchangeRequest
 
         try {
-            val decryptedData = encryptionService.decryptAES(encryptedPayload = encryptedPayloadRequest.encryptedData)
+            val decryptedData = encryptionService.decryptAES(encryptedPayload = encryptedPayloadRequest.encryptedData, encodedKey = "")
             valueExchangeRequest = mapper.readValue(decryptedData)
         } catch (exception: Exception) {
             logger.error("Error retrieving encrypted payload: ${exception.message}")
