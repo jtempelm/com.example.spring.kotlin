@@ -1,6 +1,7 @@
 package com.example.spring.kotlin.service
 
 import com.example.spring.kotlin.dto.ApiStatusDto
+import com.example.spring.kotlin.dto.EncryptedPayload
 import com.example.spring.kotlin.dto.EncryptedPayloadRequest
 import com.example.spring.kotlin.dto.ValueExchangeReferenceDto
 import com.example.spring.kotlin.dto.ValueExchangeRequest
@@ -35,7 +36,7 @@ class ValueExchangeServiceImpl : ValueExchangeService {
         val valueExchangeRequest: ValueExchangeRequest
 
         try {
-            val decryptedData = encryptionService.decryptAES(encryptedPayload = encryptedPayloadRequest.encryptedData, encodedKey = "")
+            val decryptedData = encryptionService.decryptAES(encryptedPayload = EncryptedPayload(cipherText = encryptedPayloadRequest.encryptedData, iv = "?TODO", key = "?TODO", algorithm = "?TODO"))
             valueExchangeRequest = mapper.readValue(decryptedData)
         } catch (exception: Exception) {
             logger.error("Error retrieving encrypted payload: ${exception.message}")
