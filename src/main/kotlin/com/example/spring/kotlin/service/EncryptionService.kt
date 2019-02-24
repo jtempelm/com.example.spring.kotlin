@@ -1,6 +1,9 @@
 package com.example.spring.kotlin.service
 
 import com.example.spring.kotlin.dto.EncryptedPayload
+import java.security.KeyPair
+import java.security.PrivateKey
+import java.security.PublicKey
 
 interface EncryptionService {
 
@@ -13,4 +16,15 @@ interface EncryptionService {
     fun encrypt3DES(payload: String, encodedKey: String): EncryptedPayload
 
     fun decrypt3DES(encryptedPayload: EncryptedPayload): String
+
+    fun generateKeyPair(): KeyPair
+
+    fun toPublicRSAKey(base64EncodedKey: String): PublicKey
+
+    fun toPrivateRSAKey(base64EncodedKey: String): PrivateKey
+
+    fun encryptRSA(payload: String, keyPair: KeyPair): EncryptedPayload
+
+    fun decryptRSA(encryptedPayload: EncryptedPayload): String
+
 }
