@@ -1,6 +1,7 @@
 package com.example.spring.kotlin.service
 
 import com.example.spring.kotlin.dto.EncryptedPayload
+import com.example.spring.kotlin.dto.HybridEncryptedPayload
 import com.example.spring.kotlin.util.CipherAlgorithm
 import org.springframework.stereotype.Service
 import java.nio.ByteBuffer
@@ -34,7 +35,11 @@ class EncryptionServiceImpl : EncryptionService {
     private val DES_IV_LENGTH_BYTES = 8
 
     private val RSA_CRYPTO_BITS = 2048
-    private val RSA_CIPHER = "RSA/ECB/OAEPWithSHA-512AndMGF1Padding"
+    private val RSA_CIPHER = "RSA/ECB/PKCS1Padding" //RSA/ECB/OAEPWithSHA-512AndMGF1Padding not portable
+
+    val base64EncodedSharedAppPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmAMTXnLy2BAZQw/trJSqYpO/e8VX7vzfJThQSV8KF3AMvllZ3qLSzRkFfhHPtlVGfBr3+aY42F2mPKy3x3wuc2QusRniMG2SXZ3vSABI63HUakLUZizwPK+HeW5L3bwf5UOFDJYr7oYkesBXjRapg5XFtrEpEarY0D8hYhHkeOJiPBCJ+dnjS+mq5OG9B+jj1FWrQzyUxqlZrU+Nv6idya8wmEGBvNNyGXbGbFT/fWo6Zgc8mdvhvU6gLup/RT4tI4LbslS/Gl7HtreQMS2Vr9kn7dlrZiLpD1szWC0ThFlXbOPz4PVDgT4+NG7grifbHO2isQCqqoum2YDS1NhPYQIDAQAB"
+
+    val base64EncodedSharedAppSecretKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCYAxNecvLYEBlDD+2slKpik797xVfu/N8lOFBJXwoXcAy+WVneotLNGQV+Ec+2VUZ8Gvf5pjjYXaY8rLfHfC5zZC6xGeIwbZJdne9IAEjrcdRqQtRmLPA8r4d5bkvdvB/lQ4UMlivuhiR6wFeNFqmDlcW2sSkRqtjQPyFiEeR44mI8EIn52eNL6ark4b0H6OPUVatDPJTGqVmtT42/qJ3JrzCYQYG803IZdsZsVP99ajpmBzyZ2+G9TqAu6n9FPi0jgtuyVL8aXse2t5AxLZWv2Sft2WtmIukPWzNYLROEWVds4/Pg9UOBPj40buCuJ9sc7aKxAKqqi6bZgNLU2E9hAgMBAAECggEAayJ3yzA+gRLPixk1zFU2xKUW5neOYuwrpQLMavmlliEtihZVJXkiEtTYryKEfyAYvi0Pqg6Br9RI7ihYmiqmXkM0OTNh2/nNl1dRJjC1M+MU7xNMuPphEpQvaeDXbV5CKIXuxpEsQz6dhTn8On7HV+r93qV7qWz8w8BKmeC8YoksWmIFPPSCaN3mnCVGaMI2NF/J1aX9OPZOBUV/6Jn2dntzokHd9nbatHmzmHxUx2pCw4byGQ0BmkXjn4ZxPzkvAVG8NHAdB2Rv/So75MIVru3QGX33EJiakgLetcDJrPjvn2rIauj7gKs7eQcVeoC06qPgS8cjs+73Dybs+ktchQKBgQDRik/lxqTCHJaOoqKSSZr7QJpuigg1ylvICPcK7LBDpPXNndhtmsT/T0Xp0n6HCRd0xCvVKTqzHdXgshQ5Ph4bubGMtdPe4cXNPUxI5feQnQKSDaHx7JY17UpkkfARR339TUiuE4xOCXu19k+8xXT6Sc4ddfCtXR99mrKolM5E+wKBgQC5t2jGCWs9DkSNo+wBSo7Ze1P69FI+2zTFqQEKBqSfPoN9wsihEe3O2RYyVgJ+IZokHZDnk2WUoU2x4lohLCQQF2n6UxSHkR5xpQUuR+FP6y9QdegdXJ6wiSnteHPwAowDobO86UZzBdNH2slvRC/V+1REqy8HsEYbUnKlwFE2UwKBgQDAgvVi4rzuRfug8hSwmAVWfwUjN5fRa6glQO9PTyOmEkFudm2oTUBeXEOcTjLG93hgY/btcWKnu2qLdLCV4tcgm9terpMIO59SL9YNR5LKfyYkb3fw328l/muRuG66QVekR8PVgsotzBKnm7OoeDU/2l0OvhOwA1VyPZWUwpo7zwKBgHLrpa/2IB/19kHXj7D03BSEFmGSUlqG9s7hV71GgxPvcRqfL9tL5uY6u1uGkaBPVrzGduZ19UPV1OggczlXwTEb6/507p09FaOpQ91xqWD03aBidbHFoIUJO6KxCL0aNl4A7+IUT/3ZOvaZ0lBB14AIOAsOCtotIBTEHiGnMhn1AoGAQ/axMpRkWNb4hTcCwY2IdNUTsvemyrtQX+0WKwYT5tpxuwTfb2Bo2QSTLyIZ0AlJHTm6zZL/BFvPjkW5lHuL/qA/xaVgzMEEUI0zOYHTcxnwrdoD39yjcAd4XCyPGNhGrOfFogKWTxJaVJeNn2mI3yrU2tr/eP/WABgBxa9D+0w="
 
     override fun generateBase64EncodedKey(length: Int): String {
         val secureRandom = SecureRandom()
@@ -193,4 +198,33 @@ class EncryptionServiceImpl : EncryptionService {
         return cipher.doFinal(cipherMessage).toString(UTF_8)
     }
 
+    override fun decryptHybridEncryptedPayload(hybridEncryptedPayload: HybridEncryptedPayload): String {
+        val aesKey = decryptRSA(
+                EncryptedPayload(
+                        cipherText = hybridEncryptedPayload.encryptedKey,
+                        iv = "",
+                        key = "",
+                        algorithm = CipherAlgorithm.RSA.cipher,
+                        keyPair = getKeypair(base64EncodedSharedAppPublicKey, base64EncodedSharedAppSecretKey)
+                )
+        )
+
+        return decryptAES(
+                EncryptedPayload(
+                        cipherText = hybridEncryptedPayload.encryptedPayload.cipherText,
+                        iv = hybridEncryptedPayload.encryptedPayload.iv,
+                        key = aesKey,
+                        algorithm = CipherAlgorithm.AES.cipher,
+                        keyPair = null
+                )
+        )
+    }
+
+    override fun getKeypair(base64EncodedPublicKey: String, base64EncodedPrivateKey: String): KeyPair {
+        val publicKey = toPublicRSAKey(base64EncodedPublicKey)
+
+        val privateKey = toPrivateRSAKey(base64EncodedPrivateKey)
+
+        return KeyPair(publicKey, privateKey)
+    }
 }

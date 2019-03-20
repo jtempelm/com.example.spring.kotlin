@@ -1,6 +1,7 @@
 package com.example.spring.kotlin.service
 
 import com.example.spring.kotlin.dto.EncryptedPayload
+import com.example.spring.kotlin.dto.HybridEncryptedPayload
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -27,4 +28,7 @@ interface EncryptionService {
 
     fun decryptRSA(encryptedPayload: EncryptedPayload): String
 
+    fun decryptHybridEncryptedPayload(hybridEncryptedPayload: HybridEncryptedPayload): String
+
+    fun getKeypair(base64EncodedPublicKey: String, base64EncodedPrivateKey: String): KeyPair
 }

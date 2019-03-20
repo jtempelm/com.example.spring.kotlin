@@ -1,8 +1,7 @@
 package com.example.spring.kotlin.service
 
 import com.example.spring.kotlin.dto.ApiStatusDto
-import com.example.spring.kotlin.dto.EncryptedPayload
-import com.example.spring.kotlin.dto.EncryptedPayloadRequest
+import com.example.spring.kotlin.dto.HybridEncryptedPayload
 import com.example.spring.kotlin.dto.ValueExchangeReferenceDto
 import com.example.spring.kotlin.dto.ValueExchangeRequest
 import com.example.spring.kotlin.model.ValueExchange
@@ -30,13 +29,13 @@ class ValueExchangeServiceImpl : ValueExchangeService {
         return ResponseEntity(ApiStatusDto(status = "ok"), HttpStatus.OK)
     }
 
-    override fun createValueExchange(encryptedPayloadRequest: EncryptedPayloadRequest): ResponseEntity<ValueExchangeReferenceDto> {
+    override fun createValueExchange(hybridEncryptedPayload: HybridEncryptedPayload): ResponseEntity<ValueExchangeReferenceDto> {
 
         val mapper = jacksonObjectMapper()
         val valueExchangeRequest: ValueExchangeRequest
 
         try {
-            val decryptedData = encryptionService.decryptAES(encryptedPayload = EncryptedPayload(cipherText = encryptedPayloadRequest.encryptedData, iv = "?TODO", key = "?TODO", algorithm = "?TODO", keyPair = null))
+            val decryptedData = encryptionService.decryptHybridEncryptedPayload(hybridEncryptedPayload)
             valueExchangeRequest = mapper.readValue(decryptedData)
         } catch (exception: Exception) {
             logger.error("Error retrieving encrypted payload: ${exception.message}")
